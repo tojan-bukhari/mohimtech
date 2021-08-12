@@ -22,6 +22,8 @@ function App() {
   const [id, setid] = useState("");
   const [select, setselect] = useState();
   const [show, setShow] = useState(false);
+  
+  const handleClose = () => setShow(false);
   const handleShow = async(e,id) =>{
     e.preventDefault();
     setShow(true)
@@ -99,7 +101,7 @@ function App() {
     } 
     fetchData();
   },[]);
-////////////////////ADD NEW TASK////////////////////
+
   const submit = async() => {
     console.log(text,date,priority)
     var task={text:text,date:date,priority:priority};
@@ -133,7 +135,6 @@ function App() {
     document.location.reload ();
    }
 
- /////////////////////EDIT //////////////////
  const handleedit= async (e,id)=>{
   e.preventDefault();
   var task = {text:oldtext,date:olddate,priority:oldpriority}
@@ -160,8 +161,6 @@ function App() {
           }
         }
       })   
-
-      setShow(false)
  }
 
 
@@ -169,6 +168,7 @@ function App() {
     <div className="App">
       <Modal
         show={show}
+        onHide={handleClose}
         backdrop="static"
         keyboard={false}
       >
@@ -183,10 +183,16 @@ function App() {
             Submit
           </Button>
         </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleClose}>
+            Close
+          </Button>
+            
+        </Modal.Footer>
       </Modal>
      <div className="App">
-      <div><div  >
-        <select  tabindex="-1" onChange={e=>setselect(e.target.value)} className="form-select" aria-label="Default select example">
+      <div tabindex="-1"><div  >
+        <select onChange={e=>setselect(e.target.value)} className="form-select" aria-label="Default select example">
         <option selected>Filter</option>
         <option value="strong">Strong</option>
         <option value="medium">Medium</option>
@@ -196,18 +202,18 @@ function App() {
       <form id="form">
       <dive>
       <lable>Add New Task</lable><br/>
-      <lable >Text</lable><br/>
-      <input  tabindex="-1" onChange={e => settext(e.target.value)}></input><br/><br/>
+      <lable>Text</lable><br/>
+      <input onChange={e => settext(e.target.value)}></input><br/><br/>
       <lable>Date</lable><br/>
-      <input tabindex="-1" type='date' onChange={e => setdate(e.target.value)}></input><br/><br/>
+      <input type='date' onChange={e => setdate(e.target.value)}></input><br/><br/>
       <lable>Choose priority:</lable><br/>
-      <select tabindex="-1" onChange={e=>setpriority(e.target.value)} class="form-select" aria-label="Default select example">
+      <select onChange={e=>setpriority(e.target.value)} class="form-select" aria-label="Default select example">
         <option selected>Priority</option>
         <option value="strong">Strong</option>
         <option value="medium">Medium</option>
         <option value="low">Low</option>
        </select><br/>
-       <button tabindex="-1" onClick={submit} type="button" class="btn btn-dark">ADD</button>
+      <button  onClick={submit}>ADD</button>
       </dive>
       </form>
       </div>
@@ -227,7 +233,7 @@ function App() {
                       {select === undefined ? data.items.map((el, index) => {
                         if(el.text===undefined){return}else{
                         return(
-                          <Draggable tabindex="1" key={el._id} index={index} draggableId={el._id}>
+                          <Draggable key={el._id} index={index} draggableId={el._id}>
                             {(provided, snapshot) => {
                               console.log(snapshot)
                               return(
